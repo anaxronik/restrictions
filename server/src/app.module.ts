@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.development.env',
+      // envFilePath: '.development.env',
     }),
   ],
   controllers: [],
