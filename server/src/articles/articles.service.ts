@@ -33,4 +33,19 @@ export class ArticlesService {
   remove(id: number) {
     return this.prisma.article.delete({ where: { id } });
   }
+
+  getTotalCount = () => {
+    return this.prisma.article.count();
+  };
+
+  findBy = (dto: Partial<CreateArticleDto>) => {
+    return this.prisma.article.findMany({
+      where: {
+        title: {
+          equals: dto.title,
+          mode: 'insensitive',
+        },
+      },
+    });
+  };
 }

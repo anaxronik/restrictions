@@ -22,14 +22,30 @@ export class ArticlesController {
 
   @Post()
   @ApiCreatedResponse({ type: ArticleEntity })
-  create(@Body() createArticleDto: CreateArticleDto) {
-    return this.articlesService.create(createArticleDto);
+  create(@Body() dto: CreateArticleDto) {
+    console.log(1);
+
+    console.log('=> try to create article', JSON.stringify(dto, null, 2));
+
+    return this.articlesService
+      .findBy({ title: dto.title })
+      .then(async (result) => {
+        if (result.length)
+          return {
+            status: 'exist',
+            data: result[0],
+          };
+        return this.articlesService.create(dto);
+      });
   }
 
   @Get()
   @ApiOkResponse({ type: ArticleEntity, isArray: true })
   findAll() {
-    return this.articlesService.findAll();
+    return Promise.all([
+      this.articlesService.getTotalCount(),
+      this.articlesService.findAll(),
+    ]).then(([count, items]) => ({ count, items }));
   }
 
   @Get('drafts')
