@@ -11,19 +11,13 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     const response = ctx.getResponse<Response>();
     const message = exception.message.replace(/\n/g, '');
 
-    switch (exception.code) {
-      case 'P2002': {
-        const status = HttpStatus.CONFLICT;
-        response.status(status).json({
-          statusCode: status,
-          message: message,
-        });
-        break;
-      }
-      default:
-        // default 500 error code
-        super.catch(exception, host);
-        break;
+    if (exception.code === '') {
+      return response.status(HttpStatus.CONFLICT).json({
+        statusCode: status,
+        message: message,
+      });
     }
+
+    return super.catch(exception, host);
   }
 }

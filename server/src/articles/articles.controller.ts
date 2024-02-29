@@ -23,8 +23,6 @@ export class ArticlesController {
   @Post()
   @ApiCreatedResponse({ type: ArticleEntity })
   create(@Body() dto: CreateArticleDto) {
-    console.log(1);
-
     console.log('=> try to create article', JSON.stringify(dto, null, 2));
 
     return this.articlesService
