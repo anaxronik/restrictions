@@ -1,3 +1,4 @@
+import { fakerRU } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 
 // initialize Prisma Client
@@ -53,6 +54,21 @@ async function main() {
   });
 
   console.log({ post1, post2 });
+
+  Array.from({ length: 100 }, () => null);
+
+  for await (const _ of Array.from({ length: 1000 }, () => null)) {
+    const name = fakerRU.location.country();
+    await prisma.country
+      .upsert({
+        where: { name },
+        update: { name },
+        create: { name },
+      })
+      .then((res) => {
+        console.log('country created', res);
+      });
+  }
 }
 
 // execute the main function

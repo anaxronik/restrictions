@@ -4,6 +4,7 @@ import { ArticlesModule } from './articles/articles.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RestrictionsModule } from './restrictions/restrictions.module';
 import { UsersModule } from './users/users.module';
+import { CountriesModule } from './countries/countries.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule,
     ArticlesModule,
     RestrictionsModule,
+    CountriesModule,
   ],
   controllers: [],
   providers: [],
