@@ -1,9 +1,20 @@
 "use client";
+import APIS from "@/api";
 import { Button } from "primereact/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CountriesPage() {
   const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    APIS.api.countriesControllerFindAll().then((res) => {
+      console.log({ res });
+    });
+
+    fetch("https://jsonplaceholder.typicode.com/todos/1")
+      .then((response) => response.json())
+      .then((json) => console.log(json));
+  }, []);
 
   return (
     <div className={""}>
