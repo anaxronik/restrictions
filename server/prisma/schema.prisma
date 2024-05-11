@@ -7,11 +7,17 @@ datasource db {
   url      = env("MONGO_URL")
 }
 
-model Country {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String    @unique
-  disabled Boolean?  @default(false)
-  text     translate
+model country {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  cities city[]
+}
+
+model city {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  Country   country? @relation(fields: [countryId], references: [id])
+  countryId String?  @db.ObjectId
 }
 
 type translate {
