@@ -8,19 +8,37 @@ datasource db {
 }
 
 model country {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  cities city[]
+  id      String          @id @default(auto()) @map("_id") @db.ObjectId
+  name    String          @unique
+  cities  city[]
+  regions countryRegion[]
+}
+
+model countryRegion {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  country   country? @relation(fields: [countryId], references: [id])
+  countryId String?  @db.ObjectId
+  cities    city[]
 }
 
 model city {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   @unique
-  Country   country? @relation(fields: [countryId], references: [id])
-  countryId String?  @db.ObjectId
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  name            String         @unique
+  Country         country?       @relation(fields: [countryId], references: [id])
+  countryId       String?        @db.ObjectId
+  cityType        cityType?
+  countryRegion   countryRegion? @relation(fields: [countryRegionId], references: [id])
+  countryRegionId String?        @db.ObjectId
 }
 
 type translate {
   ru String?
   en String?
+}
+
+enum cityType {
+  city
+  selo
+  vilage
 }
