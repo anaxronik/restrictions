@@ -19,4 +19,17 @@ export class CountriesService {
   remove(id: string) {
     return this.prisma.country.delete({ where: { id } });
   }
+
+  find(dto: CreateCountryDto) {
+    console.log({ body: dto });
+
+    return this.prisma.country.findMany({
+      where: {
+        name: {
+          contains: dto.name,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
 }

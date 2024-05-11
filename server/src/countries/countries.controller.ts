@@ -25,4 +25,10 @@ export class CountriesController {
   remove(@Param('id') id: string) {
     return this.countriesService.remove(id);
   }
+
+  @Post('/find')
+  @ApiOkResponse({ type: CountryEntity, isArray: true })
+  find(@Body() body: CreateCountryDto) {
+    return this.countriesService.find(body);
+  }
 }

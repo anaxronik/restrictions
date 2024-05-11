@@ -49,6 +49,16 @@ export const countriesControllerRemove = <TData = AxiosResponse<void>>(
     );
   }
 
+export const countriesControllerFind = <TData = AxiosResponse<CountryEntity[]>>(
+    createCountryDto: CreateCountryDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `http://localhost:8000/countries/find`,
+      createCountryDto,options
+    );
+  }
+
 export type CountriesControllerCreateResult = AxiosResponse<CountryEntity>
 export type CountriesControllerFindAllResult = AxiosResponse<CountryEntity[]>
 export type CountriesControllerRemoveResult = AxiosResponse<void>
+export type CountriesControllerFindResult = AxiosResponse<CountryEntity[]>

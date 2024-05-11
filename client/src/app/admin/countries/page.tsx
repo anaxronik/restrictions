@@ -1,6 +1,7 @@
 "use client";
 import APIS from "@/api";
 import { CountryEntity } from "@/api/api/api";
+import FindCountry from "@/components/FindCountry";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
@@ -26,8 +27,24 @@ export default function CountriesPage() {
   }, []);
 
   return (
-    <div className={""}>
+    <div className={"flex flex-column gap-4"}>
       <Toast ref={toast} />
+
+      <FindCountry
+        onSelectCountry={(a) => {
+          console.log(a);
+        }}
+      />
+      <FindCountry
+        onSelectCountry={(a) => {
+          console.log(a);
+        }}
+      />
+      <FindCountry
+        onSelectCountry={(a) => {
+          console.log(a);
+        }}
+      />
       <div>
         <form
           onSubmit={(e) => {
