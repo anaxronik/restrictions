@@ -8,7 +8,13 @@ datasource db {
 }
 
 model Country {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String   @unique
-  disabled Boolean? @default(false)
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String    @unique
+  disabled Boolean?  @default(false)
+  text     translate
+}
+
+type translate {
+  ru String?
+  en String?
 }

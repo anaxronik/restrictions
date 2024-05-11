@@ -10,6 +10,7 @@ export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
 
   @Post()
+  @ApiOkResponse({ type: CountryEntity })
   create(@Body() createCountryDto: CreateCountryDto) {
     return this.countriesService.create(createCountryDto);
   }
