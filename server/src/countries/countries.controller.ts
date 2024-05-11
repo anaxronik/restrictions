@@ -1,5 +1,4 @@
-import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
-import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CountriesService } from './countries.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -11,22 +10,18 @@ export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
 
   @Post()
-  @ApiOkResponse({ type: CountryEntity })
   create(@Body() createCountryDto: CreateCountryDto) {
     return this.countriesService.create(createCountryDto);
   }
 
   @Get()
-  @UseInterceptors(CacheInterceptor)
-  @CacheTTL(30)
   @ApiOkResponse({ type: CountryEntity, isArray: true })
   findAll() {
     return this.countriesService.findAll();
   }
 
-  @Post('/search')
-  @ApiOkResponse({ type: CountryEntity, isArray: true })
-  search(@Body() dto: CreateCountryDto) {
-    return this.countriesService.search(dto);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.countriesService.remove(id);
   }
 }

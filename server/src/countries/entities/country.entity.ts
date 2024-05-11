@@ -3,8 +3,8 @@ import { Country } from '@prisma/client';
 
 export class CountryEntity implements Partial<Country> {
   @ApiProperty()
-  name?: string;
+  id: string;
 
   @ApiProperty()
-  id?: number;
+  name: string;
 }
