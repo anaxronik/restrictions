@@ -6,6 +6,10 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 
+import { Button } from "primereact/button";
+import { Column } from "primereact/column";
+import { DataTable } from "primereact/datatable";
+
 export default function CountriesPage() {
   const [countries, setCountries] = useState<CountryEntity[]>([]);
   const [name, setName] = useState("");
@@ -35,16 +39,7 @@ export default function CountriesPage() {
           console.log(a);
         }}
       />
-      <FindCountry
-        onSelectCountry={(a) => {
-          console.log(a);
-        }}
-      />
-      <FindCountry
-        onSelectCountry={(a) => {
-          console.log(a);
-        }}
-      />
+
       <div>
         <form
           onSubmit={(e) => {
@@ -73,27 +68,39 @@ export default function CountriesPage() {
           <InputText value={name} onChange={(e) => setName(e.target.value)} />
         </form>
       </div>
-      <div className="flex flex-column">
-        {countries.map((c) => {
-          return (
-            <div key={c.id}>
-              <span>{c.name}</span>
-              <span>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    APIS.api.countriesControllerRemove(c.id).then(() => {
-                      updateCountries();
-                    });
-                  }}
-                >
-                  delete
-                </button>
-              </span>
-            </div>
-          );
-        })}
-      </div>
+
+      <DataTable
+        value={countries}
+        scrollable
+        scrollHeight="400px"
+        virtualScrollerOptions={{ itemSize: 46 }}
+        tableStyle={{ minWidth: "50rem" }}
+      >
+        <Column
+          field="name"
+          header="Название страны"
+          style={{
+            width: "100%",
+          }}
+        ></Column>
+        <Column
+          body={(row: CountryEntity) => {
+            return (
+              <Button
+                icon={<i className="pi pi-trash"></i>}
+                onClick={() => {
+                  APIS.api
+                    .countriesControllerRemove(row.id)
+                    .then(updateCountries);
+                }}
+                type="button"
+                text
+                severity="danger"
+              />
+            );
+          }}
+        ></Column>
+      </DataTable>
     </div>
   );
 }

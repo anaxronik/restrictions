@@ -19,22 +19,35 @@ export default function FindCountry(props: Props) {
   const [filteredCountries, setFilteredCountries] = useState<TCountry[]>([]);
 
   const search = ({ query }: AutoCompleteCompleteEvent) => {
+    console.log("search");
+
     const name = String(query).trim().toLowerCase();
-    if (!name) return;
-    APIS.api
-      .countriesControllerFind({
-        name,
-      })
-      .then(({ data }) => {
-        setFilteredCountries(data);
-      })
-      .catch(() => {
-        setFilteredCountries([]);
-      });
+
+    if (name) {
+      APIS.api
+        .countriesControllerFind({
+          name,
+        })
+        .then(({ data }) => {
+          setFilteredCountries(data);
+        })
+        .catch(() => {
+          setFilteredCountries([]);
+        });
+    } else {
+      APIS.api
+        .countriesControllerFindAll()
+        .then(({ data }) => {
+          setFilteredCountries(data);
+        })
+        .catch(() => {
+          setFilteredCountries([]);
+        });
+    }
   };
 
   return (
-    <span className="p-float-label">
+    <span className="p-float-label w-full">
       <AutoComplete
         field="name"
         value={selectedCountry}
@@ -46,6 +59,7 @@ export default function FindCountry(props: Props) {
         }}
         inputId="ac"
         placeholder="Страна"
+        dropdown
       />
       <label htmlFor="ac">Поиск страны</label>
     </span>

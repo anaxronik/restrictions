@@ -22,14 +22,16 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={classnames(inter.className, "flex", "flex-row", "gap-4")}
-      >
-        <aside className="">
-          <NavigationMenu />
-        </aside>
-
-        <main className="flex-1">{children}</main>
+      <body className={classnames(inter.className)}>
+        <header>
+          <h1>1</h1>
+        </header>
+        <div className="flex flex-row gap-4 px-2">
+          <aside className="">
+            <NavigationMenu />
+          </aside>
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   );
