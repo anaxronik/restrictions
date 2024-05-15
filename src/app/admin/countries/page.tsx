@@ -5,12 +5,13 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 
+import { country } from "@prisma/client";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
 export default function CountriesPage() {
-  const [countries, setCountries] = useState<any[]>([]);
+  const [countries, setCountries] = useState<country[]>([]);
   const [name, setName] = useState("");
   const toast = useRef<Toast>(null);
 
@@ -19,8 +20,9 @@ export default function CountriesPage() {
   useEffect(() => {
     fetch("/api/countries")
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: country[]) => {
         console.log({ data });
+        setCountries(data);
       });
   }, []);
 

@@ -1,6 +1,11 @@
 // export const dynamic = "force-dynamic"; // defaults to auto
+
+import { prisma } from "../../../../prisma/prismaClient";
+
 export async function GET(request: Request) {
-  return Response.json({ asd: 1, method: "get" });
+  return prisma.country.findMany().then((result) => {
+    return Response.json(result);
+  });
 }
 
 export async function POST(request: Request) {

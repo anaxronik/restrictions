@@ -10,6 +10,7 @@
     "api:generate": "orval --config ./src/api/orval.config.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.14.0",
     "classnames": "^2.5.1",
     "next": "14.2.3",
     "primeflex": "^3.3.1",
@@ -24,6 +25,7 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "prisma": "^5.14.0",
     "typescript": "^5"
   }
 }
