@@ -1,6 +1,5 @@
 "use client";
-import APIS from "@/api";
-import { CountryEntity } from "@/api/api/api";
+
 import FindCountry from "@/components/FindCountry";
 import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
@@ -11,23 +10,18 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
 export default function CountriesPage() {
-  const [countries, setCountries] = useState<CountryEntity[]>([]);
+  const [countries, setCountries] = useState<any[]>([]);
   const [name, setName] = useState("");
   const toast = useRef<Toast>(null);
 
-  const updateCountries = () => {
-    return APIS.api
-      .countriesControllerFindAll()
-      .then((res) => {
-        setCountries(res.data);
-      })
-      .catch(() => {
-        setCountries([]);
-      });
-  };
+  const updateCountries = () => {};
 
   useEffect(() => {
-    updateCountries();
+    fetch("/api/countries")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log({ data });
+      });
   }, []);
 
   return (
@@ -45,24 +39,6 @@ export default function CountriesPage() {
           onSubmit={(e) => {
             e.preventDefault();
             console.log("submit");
-            APIS.api
-              .countriesControllerCreate({ name })
-              .then(() => {
-                setName("");
-              })
-              .catch((err: any) => {
-                console.log({ err });
-
-                toast.current?.show({
-                  severity: "error",
-                  summary: err?.response?.data?.message,
-                  detail: err?.response?.data?.message,
-                  life: 3000,
-                });
-              })
-              .finally(() => {
-                updateCountries();
-              });
           }}
         >
           <InputText value={name} onChange={(e) => setName(e.target.value)} />
@@ -84,15 +60,11 @@ export default function CountriesPage() {
           }}
         ></Column>
         <Column
-          body={(row: CountryEntity) => {
+          body={(row: any) => {
             return (
               <Button
                 icon={<i className="pi pi-trash"></i>}
-                onClick={() => {
-                  APIS.api
-                    .countriesControllerRemove(row.id)
-                    .then(updateCountries);
-                }}
+                onClick={() => {}}
                 type="button"
                 text
                 severity="danger"

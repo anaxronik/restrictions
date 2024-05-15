@@ -1,7 +1,5 @@
 "use client";
 
-import APIS from "@/api";
-import { CountryEntity } from "@/api/api/api";
 import {
   AutoComplete,
   AutoCompleteCompleteEvent,
@@ -12,7 +10,7 @@ type Props = {
   onSelectCountry?: (value: TCountry) => void;
 };
 
-interface TCountry extends CountryEntity {}
+interface TCountry {}
 
 export default function FindCountry(props: Props) {
   const [selectedCountry, setSelectedCountry] = useState<TCountry | null>(null);
@@ -24,25 +22,7 @@ export default function FindCountry(props: Props) {
     const name = String(query).trim().toLowerCase();
 
     if (name) {
-      APIS.api
-        .countriesControllerFind({
-          name,
-        })
-        .then(({ data }) => {
-          setFilteredCountries(data);
-        })
-        .catch(() => {
-          setFilteredCountries([]);
-        });
     } else {
-      APIS.api
-        .countriesControllerFindAll()
-        .then(({ data }) => {
-          setFilteredCountries(data);
-        })
-        .catch(() => {
-          setFilteredCountries([]);
-        });
     }
   };
 
