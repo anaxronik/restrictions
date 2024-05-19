@@ -1,80 +1,82 @@
 "use client";
 
-import FindCountry from "@/components/FindCountry";
-import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
+import { API } from "@/api/api";
+import CreateCountryForm from "@/components/CreateCountryForm/CreateCountryForm";
+import { queryClient } from "@/components/ReactQueryProvider";
 import { country } from "@prisma/client";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
 export default function CountriesPage() {
-  const [countries, setCountries] = useState<country[]>([]);
-  const [name, setName] = useState("");
+  const [selectedProducts, setSelectedProducts] = useState<country[]>([]);
   const toast = useRef<Toast>(null);
-
-  const updateCountries = () => {};
-
-  useEffect(() => {
-    fetch("/api/countries")
-      .then((res) => res.json())
-      .then((data: country[]) => {
-        console.log({ data });
-        setCountries(data);
-      });
-  }, []);
+  const query = useQuery<country[]>({
+    queryKey: ["getCountries"],
+    queryFn: API.countries.getCountries,
+    refetchOnMount: false,
+  });
 
   return (
     <div className={"flex flex-column gap-4"}>
       <Toast ref={toast} />
 
-      <FindCountry
-        onSelectCountry={(a) => {
-          console.log(a);
-        }}
-      />
-
-      <div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("submit");
-          }}
-        >
-          <InputText value={name} onChange={(e) => setName(e.target.value)} />
-        </form>
-      </div>
+      <CreateCountryForm />
 
       <DataTable
-        value={countries}
+        size="small"
+        value={query.data}
         scrollable
-        scrollHeight="400px"
-        virtualScrollerOptions={{ itemSize: 46 }}
-        tableStyle={{ minWidth: "50rem" }}
+        scrollHeight="40vw"
+        virtualScrollerOptions={{ itemSize: 32 }}
+        tableStyle={{ minWidth: "20rem" }}
+        loading={query.isFetching}
+        selectionMode="checkbox"
+        selection={selectedProducts}
+        onSelectionChange={(e) => {
+          console.log("onSelectionChange", e.value);
+
+          setSelectedProducts(e.value);
+        }}
       >
         <Column
+          selectionMode="multiple"
+          headerStyle={{ width: "3rem" }}
+        ></Column>
+        <Column
           field="name"
-          header="Название страны"
+          header={`Название страны (${query.data?.length || ""})`}
           style={{
             width: "100%",
           }}
         ></Column>
-        <Column
-          body={(row: any) => {
-            return (
-              <Button
-                icon={<i className="pi pi-trash"></i>}
-                onClick={() => {}}
-                type="button"
-                text
-                severity="danger"
-              />
-            );
-          }}
-        ></Column>
+        <Column body={(row) => <RemoveButton id={row.id} />}></Column>
       </DataTable>
     </div>
+  );
+}
+
+function RemoveButton(props: { id: string }) {
+  const mutation = useMutation({
+    mutationFn: API.countries.removeCountry,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getCountries"] });
+    },
+  });
+  return (
+    <Button
+      icon={<i className="pi pi-trash"></i>}
+      onClick={() => {
+        mutation.mutate(props.id);
+      }}
+      type="button"
+      text
+      severity="danger"
+      loading={mutation.isPending}
+    />
   );
 }

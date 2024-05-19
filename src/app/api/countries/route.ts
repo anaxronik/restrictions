@@ -9,5 +9,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  return Response.json({ asd: 2, method: "post" });
+  return request.json().then((body) =>
+    prisma.country
+      .create({
+        data: {
+          name: body.name,
+        },
+      })
+      .then((result) => Response.json(result))
+  );
 }
