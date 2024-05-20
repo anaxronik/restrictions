@@ -6,16 +6,16 @@ import { useRef, useState } from "react";
 import { API } from "@/api/api";
 import CreateCountryForm from "@/components/CreateCountryForm/CreateCountryForm";
 import { queryClient } from "@/components/ReactQueryProvider";
-import { country } from "@prisma/client";
+import { Country } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 
 export default function CountriesPage() {
-  const [selectedProducts, setSelectedProducts] = useState<country[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<Country[]>([]);
   const toast = useRef<Toast>(null);
-  const query = useQuery<country[]>({
+  const query = useQuery<Country[]>({
     queryKey: ["getCountries"],
     queryFn: API.countries.getCountries,
     refetchOnMount: false,

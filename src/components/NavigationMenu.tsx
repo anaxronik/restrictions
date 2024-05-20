@@ -9,6 +9,7 @@ const NavigationMenu = () => {
   const urls: { text: string; url: string }[] = [
     { text: "main", url: "/" },
     { text: "Countries", url: "/admin/countries" },
+    { text: "Cities", url: "/admin/cities" },
   ];
 
   return (

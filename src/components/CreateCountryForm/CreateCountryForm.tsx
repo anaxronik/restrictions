@@ -56,6 +56,7 @@ const CreateCountryForm = (props: Props) => {
                     aria-describedby="username-help"
                     {...renderProps.field}
                     // disabled={mutation.isPending}
+                    autoFocus
                   />
                 </FloatLabel>
                 {renderProps.fieldState.error && (

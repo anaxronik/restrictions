@@ -4,7 +4,7 @@ export async function DELETE(_: Request, { params }: any) {
   return prisma.country
     .delete({
       where: {
-        id: params.id,
+        id: parseInt(params.id),
       },
     })
     .then((result) => Response.json(result));
