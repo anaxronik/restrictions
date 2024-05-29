@@ -9,13 +9,13 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  return request.json().then((body) =>
-    prisma.country
+  return request.json().then((body) => {
+    return prisma.country
       .create({
         data: {
           name: body.name,
         },
       })
-      .then((result) => Response.json(result))
-  );
+      .then((result) => Response.json(result));
+  });
 }

@@ -29,7 +29,11 @@ export default function RootLayout({
       <body className={classnames(inter.className)}>
         <ReactQueryProvider>
           <header>
-            <h1>1</h1>
+            <div>
+              <div>ad</div>
+              <div>ad</div>
+              <div>ad</div>
+            </div>
           </header>
           <div className="flex flex-row gap-4 px-2">
             <aside className="">

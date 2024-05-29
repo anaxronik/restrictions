@@ -1,7 +1,7 @@
 
 Залить изменения схемы в базу
 ```
-npx prisma db push
+npx prisma db push -y
 ```
 
 Сгенерироватьт клиент

@@ -2,4 +2,10 @@
 }
 
 .link {
+  text-decoration: none;
+}
+
+.active {
+  color: grey;
+  text-decoration: underline;
 }

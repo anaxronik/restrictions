@@ -9,15 +9,19 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // uses connection pooling
+  // url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Country {
   id   Int    @id @default(autoincrement())
   name String
   City City[]
+
+  Restriction   Restriction? @relation(fields: [restrictionId], references: [id])
+  restrictionId String?
 }
 
 model CountryRegion {
@@ -30,4 +34,74 @@ model City {
   name      String
   country   Country @relation(fields: [countryId], references: [id])
   countryId Int
+}
+
+model Restriction {
+  id String @id @default(uuid())
+
+  filter__countries          Country[]
+  filter__senderType         ContragentType[]
+  filter__receiverType       ContragentType[]
+  filter__cargoType          CargoType[]
+  filter__borderCrossingType BorderCrossingType[]
+
+  data__comment String?
+  data__tnweds  Tnwed[]
+}
+
+model RestrictionsFilter {
+  id String @id @default(uuid())
+
+  countryCodes        String[]
+  senderTypes         ContragentType[]
+  receiverTypes       ContragentType[]
+  cargoTypes          CargoType[]
+  borderCrossingTypes BorderCrossingType[]
+}
+
+enum ContragentType {
+  LEGAL
+  INDIVIDUAL
+}
+
+enum CargoType {
+  CARGO
+  DOCUMENTS
+}
+
+enum BorderCrossingType {
+  EXPORT
+  IMPORT
+  INSIDE
+}
+
+model RestrictedTnwed {
+  filterId String
+
+  code Int    @id
+  name String
+}
+
+model RestrictedAlert {
+  filterId String
+
+  id   Int    @id
+  text String
+}
+
+model Tnwed {
+  code Int    @id
+  name String
+
+  DataTnwed     DataTnwed[]
+  Restriction   Restriction? @relation(fields: [restrictionId], references: [id])
+  restrictionId String?
+}
+
+model DataTnwed {
+  id      Int     @id @default(autoincrement())
+  comment String?
+
+  tnwed     Tnwed @relation(fields: [tnwedCode], references: [code])
+  tnwedCode Int
 }

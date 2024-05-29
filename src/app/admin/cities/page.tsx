@@ -7,7 +7,6 @@ export default function CitiesPage() {
   return (
     <div className={"flex flex-column gap-4"}>
       <CreateCityForm />
-      <div>Cities page</div>
       <CitiesList />
     </div>
   );

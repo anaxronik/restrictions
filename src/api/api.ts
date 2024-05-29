@@ -1,6 +1,10 @@
 import { TCreateCityBody } from "@/app/api/cities/route";
 import { TSearchCountryBody } from "@/app/api/countries/search/route";
-import { City, Country } from "@prisma/client";
+import {
+  TSearchRestrictionsRequestBody,
+  TSearchRestrictionsResponseBody,
+} from "@/app/api/restrictions/search/route";
+import { City, Country, Restriction } from "@prisma/client";
 const headers = { "Content-Type": "application/json" };
 
 const getCountries = (): Promise<Country[]> =>
@@ -37,6 +41,31 @@ const createCity = (data: TCreateCityBody): Promise<City> =>
     body: JSON.stringify(data),
   }).then((res) => res.json());
 
+const removeCity = (id: string): Promise<Country> =>
+  fetch(`/api/cities/${id}`, {
+    method: "DELETE",
+    headers,
+  }).then((res) => res.json());
+
+const getAllRestrictions = (): Promise<Restriction[]> =>
+  fetch("/api/restrictions").then((res) => res.json());
+
+const searchRestrictions = (
+  data: TSearchRestrictionsRequestBody
+): Promise<TSearchRestrictionsResponseBody[]> =>
+  fetch("/api/restrictions/search", {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data),
+  }).then((res) => res.json());
+
+const createRes = (data: TCreateCityBody): Promise<City> =>
+  fetch("/api/cities", {
+    method: "POST",
+    headers,
+    body: JSON.stringify(data),
+  }).then((res) => res.json());
+
 export const API = {
   countries: {
     getCountries,
@@ -45,6 +74,11 @@ export const API = {
     searchCountry,
     getCities,
     createCity,
+    removeCity,
+  },
+  restrictions: {
+    getAllRestrictions,
+    searchRestrictions,
   },
 };
 
@@ -55,4 +89,7 @@ export enum QueryKeys {
   searchCountry,
   getCities,
   createCity,
+  removeCity,
+  getAllRestrictions,
+  searchRestrictions,
 }

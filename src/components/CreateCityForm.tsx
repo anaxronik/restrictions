@@ -1,4 +1,5 @@
 import { API, QueryKeys } from "@/api/api";
+import { useSearchCountryRequest } from "@/hooks/requests/useSearchCountryRequest";
 import { Country } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import { AutoComplete } from "primereact/autocomplete";
@@ -16,12 +17,7 @@ type Inputs = {
 
 const CreateCityForm = () => {
   const [countries, setCountries] = useState<Country[]>([]);
-  const searchCountry = useMutation({
-    mutationFn: API.countries.searchCountry,
-    onSuccess: (countries) => {
-      setCountries(countries);
-    },
-  });
+  const searchCountry = useSearchCountryRequest({ onSuccess: setCountries });
   const createCity = useMutation({
     mutationFn: API.countries.createCity,
     onSuccess: () => {

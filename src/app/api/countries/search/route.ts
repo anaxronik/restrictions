@@ -11,7 +11,12 @@ export async function POST(request: Request) {
         where: {
           name: {
             contains: body.name,
+            mode: "insensitive",
           },
+        },
+        select: {
+          name: true,
+          id: true,
         },
       })
       .then((result) => Response.json(result));
