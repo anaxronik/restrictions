@@ -63,4 +63,18 @@ export class TnwedService {
       return { text: String(error), error };
     }
   }
+
+  async export() {
+    // https://docs.sheetjs.com/docs/demos/net/server/nestjs/
+    const data = await this.prisma.tnwed.findMany({
+      take: 100,
+    });
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['code', 'description'],
+      ...data.map((d) => [d.code, d.description]),
+    ]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Tnweds');
+    return XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+  }
 }

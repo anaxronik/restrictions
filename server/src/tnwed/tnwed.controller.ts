@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -16,6 +17,8 @@ import {
 import { SearchTnwedDto } from './dto/search-tnwed.dto';
 import { TnwedDto } from './dto/tnwed.dto';
 import { TnwedService } from './tnwed.service';
+
+import { StreamableFile } from '@nestjs/common';
 
 @Controller('tnwed')
 @ApiTags('tnwed')
@@ -55,5 +58,12 @@ export class TnwedController {
   @UseInterceptors(FileInterceptor('file'))
   import(@UploadedFile() file: Express.Multer.File) {
     return this.tnwedService.import(file);
+  }
+
+  @Post('/export')
+  @Header('Content-Disposition', 'attachment; filename="exports.xlsx"')
+  async export() {
+    const buffer = await this.tnwedService.export();
+    return new StreamableFile(buffer);
   }
 }
